@@ -1,0 +1,164 @@
+﻿@model File_Transfer_System.Models.FileInfoModel
+
+@{
+    ViewBag.Title = "CreateFile";
+}
+
+@using (Html.BeginForm("SaveFileDetails", "CreateFile", FormMethod.Post, new { @id = "CreateFileForm", autocomplete = "off" }))
+{
+
+    <div class="createTable tableBlock">
+        <div class="row">
+            <table class="table">
+                <tr class="selectedActivies">
+                    <td colspan="3">
+                        <div class="col-sm-12 p-1">
+                            <div class="row">
+                                <div class="activities col-sm-12 "><span class="titleHead">Create File</span></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="tableTH">File No.</td>
+                    <td class="p-0 ">
+                        @Html.TextBox("FileNo", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                        @*@Html.ValidationMessage("TenderFileNo", "", new { @class = "text-danger" })*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Department Name</td>
+                    <td class="p-0">
+                        @Html.DropDownListFor(x => x.DeptId, new SelectList(Model.DepartmentList, "Id", "Name"), "Select Department", new { @class = "selectDrpdwn", @id = "DeptName" })
+                        @*@Html.ValidationMessage("ProjectName", "", new { @class = "text-danger" })*@
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="tableTH">Sub-Department Name</td>
+                    <td class="p-0">
+                        @Html.DropDownListFor(x => x.SubDeptId, new SelectList(Model.SubDeptList, "Id", "Name"), "Select Sub-Department", new { @class = "selectDrpdwn", @id = "SubDeptName" })
+                        @*@Html.DropDownListFor(x => x.EnquiryTypeId, new SelectList(Model.EnquiryTypeList, "Value", "Text", Model.EnquiryType), "Select Type", new { @class = "browser-default custom-select" })*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Vigilance Case</td>
+                    <td  class="p-0">
+                        @Html.TextBox("VigilanceCase", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Subject</td>
+                    <td class="p-0">
+                        @Html.TextBox("Subject", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Remarks</td>
+                    <td class="p-0">
+                        @Html.TextBox("Remarks", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Serial No</td>
+                    <td  class="p-0">
+                        @Html.TextBox("SerialNo", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">File Type</td>
+                    <td class="p-0">
+                        @Html.TextBox("FileType", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableTH">Link File</td>
+                    <td  class="p-0">
+                        @Html.TextBox("LinkFile", "", new { @class = "w-100 text-left pl-10 pr-10" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="p-0">
+
+                        <div class="col-sm-12">
+                            <div class="row align-items-center">
+                                <div class="col-sm-8 enqBtnsDiv p-0">
+                                    <button type="button" class="submitEnq cancelEnq" id="btnCancel" onclick="clearData();">Cancel</button>
+                                    <button type="button" class="submitEnq" id="btnSave">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header modelHeader">
+                    <span class="modal-title modalMsgTitle" id="modalTitle"></span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label id="modalBody" class="lableMsg">  </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="submitBomBtn publishBtn" id="modalOkButton">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+
+    /*** upload file styleing */
+
+    function successModal() {
+        $('#modalTitle').html('Success');
+        $('#modalBody').html('File Saved successfully');
+        $("#modalOkButton").attr('onclick', "window.location.reload();");
+        $("#successModel").modal('show');
+    };
+
+    function failureModal() {
+        $('#modalTitle').html('Failure');
+        $('#modalBody').html('Error: While saving the file details.');
+        $("#modalOkButton").attr('data-dismiss', 'modal');
+        $("#successModel").modal('show');
+    };
+
+    $("#btnSave").click(function () {
+
+        var formData = $("#CreateFileForm").serialize();
+        $.ajax({
+            type: "POST",
+            url: '/CreateFile/SaveFileDetails',
+            dataType: "JSON",
+            data: formData,
+            success: function (data) {
+                if (data > 0) {
+                    successModal();
+                }
+                else {
+                    failureModal();
+                }
+            },
+            error: function (courses) {
+                failureModal();
+            }
+        });
+    });
+
+
+
+
+
+
+</script>
