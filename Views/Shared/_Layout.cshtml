@@ -20,9 +20,16 @@
 
 </head>
 <body>
-    
+    <div class="header" style="height:70px;">
+        <div class="row LoginUser">
+            <div class="col-sm-12 logOut text-right">
+                <p style="color:#009688;">Welcome</p>            
+                @Html.ActionLink("Logout", "Logout", "Login")
+            </div>
+        </div>
+    </div>
     <div class="container body-content">
-        @RenderBody()        
+        @RenderBody()
     </div>
 
 </body>

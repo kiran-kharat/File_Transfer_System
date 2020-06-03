@@ -1,0 +1,105 @@
+﻿@model File_Transfer_System.Models.LoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/Assets/css/bootstrap-material-design.min.css">
+    <link rel="stylesheet" href="~/Assets/css/style.css" />
+
+    <!--<script src="js/materialize.min.js"></script>-->
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+
+    <script src="~/Assets/js/popper.js"></script>
+    <script src="~/Assets/js/bootstrap-material-design.js"></script>
+    <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
+
+    <!-- Added for datepicker-->
+</head>
+<body>
+    <div class="container-fluid ">
+        <div class="main-content">
+            <div class="row loginBlock">
+                <span>Login</span>
+                @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @id = "LoginForm", @class = "loginForm", @autocomplete = "off" }))
+                {
+                    <div class="form-group bmd-form-group">
+                        <!-- left unspecified, .bmd-form-group will be automatically added (inspect the code) -->
+                        <label for="email" class="font-weight-bold">Email Id</label>
+                        @Html.TextBoxFor(x => x.UserName, null, new { @class = "form-control", id = "email", @required = "required", @autocomplete = "off" })
+                    </div>
+                    <div class="form-group bmd-form-group">
+                        <!-- manually specified -->
+                        <label for="password" class="font-weight-bold">Password</label>
+                        @Html.TextBoxFor(x => x.Password, null, new { @class = "form-control", id = "password", @type = "password", @required = "required", @autocomplete = "off" })
+                    </div>
+                    <div>
+                        <span id="errorSpan" class="errorSpanMsg m-0 text-left" style="display:none">Error</span>
+                    </div>
+                    <div class="loginBtn">
+                        <button type="submit" class="btn" id="loginBtn">LOGIN</button>
+                    </div>
+                    @*<div class="signup">
+                            <button type="button" class="btn" onclick="location.href='@Url.Action("Index", "Signup")'">SIGN UP</button>
+                        </div>
+                        <div class="forgotPassword">
+                            <a href="#" class="Bold" onclick="location.href='@Url.Action("Index", "ManagePassword")'">Forgot Password</a>
+                        </div>*@
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header modelHeader">
+                    <span class="modal-title modalMsgTitle" id="modalTitle"></span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label id="modalBody" class="lableMsg">  </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="submitBomBtn publishBtn" id="modalOkButton">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script>
+    $("#loginBtn").on('click', function (e) {
+
+        var userName = $("#email").val();
+        var passWord = $("#password").val();
+
+        if (!passWord || !userName) {
+            $("#errorSpan").html('Kindly fill both fields');
+            $("#errorSpan").removeAttr('style');
+            return false;
+        }
+
+        var model = { UserName: userName, Password: passWord };
+
+        $.ajax({
+            type: 'POST',
+            url: "/Login/Login",
+            data: JSON.stringify(model),
+            dataType: 'json',
+            contentType: "application/json"            
+        });
+    });
+</script>
