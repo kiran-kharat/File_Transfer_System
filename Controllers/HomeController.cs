@@ -10,7 +10,7 @@ namespace File_Transfer_System.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "CreateFile", null);
+            return RedirectToAction("Index", "Login", null);
         }
 
     }

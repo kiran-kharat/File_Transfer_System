@@ -15,10 +15,7 @@ namespace File_Transfer_System.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            fileDetailsDAL = new FileDetailsDAL();
-            FileInfoModel fileInfoModel = new FileInfoModel();
-            fileInfoModel = fileDetailsDAL.GetFileInfo();
-            return View("CreateFile", fileInfoModel);
+            return View("CreateFile");
         }
 
         [HttpPost]
