@@ -57,6 +57,59 @@
                         @Html.TextBox("FileType", "", new { @class = "w-100 text-left pl-10 pr-10" })
                     </td>
                 </tr>
+                               <tr>
+
+                    @*<td class="tableTH">@Html.LabelFor(model => model.Files, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Files, "", new { @type = "file", @multiple = "multiple" })
+                        </td>*@
+                    @*<td>File:</td>
+                        <td><input type="file" name="File" multiple="multiple" /></td>*@
+
+
+                    <td>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                           
+                                @Html.Label("lblfile", htmlAttributes: new { @class = "control-label col-md-2" })
+                    </td>
+                    <td>
+                        <div class="col-md-10">
+                            @Html.TextBox("fileControl", "", new { @type = "file", @multiple = "multiple" })
+
+                        </div>
+                    </td>
+
+                        @*<span>Select File:</span>
+                            <input type="file" name="selectedfile" id="selectedfile" multiple="multiple" />
+                            <hr />*@
+
+
+                        @*<label for="otherAttach_1" class="bold">
+                            <img src="/Assets/images/attachment.png" width="10px" /> lblfile
+                        </label>
+                    </td>
+                    <td>
+                        <div class="attachFilenm d-none" id="divOtherFileName_1">
+                            <span class="bold fileName othrfileName"></span>
+                            <button type="button" class="removeButton otherAttach_1" onclick="removeName(this);">X</button>
+                            <img class="attachImg" src="/Assets/images/AllFile.svg" />
+                        </div>
+                        @Html.TextBox("fileControl", null, new { @class = "form-control col-sm-8 d-none", type = "file", @id = "otherAttach_1",@name= "otherAttach_1", @multiple = "multiple" })
+
+
+                    </td>*@
+                </tr>
+
+                <tr>
+                    <td>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 text-success">
+                                <span style="color:green">@Html.Raw(ViewBag.UploadStatus)</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2" class="p-0">
 
@@ -64,7 +117,7 @@
                             <div class="row align-items-center">
                                 <div class="col-sm-8 enqBtnsDiv p-0">
                                     <button type="button" class="submitEnq cancelEnq" id="btnCancel" onclick="clearData();">Cancel</button>
-                                    <button type="button" class="submitEnq" id="btnSave">Save</button>
+                                    <button type="button" class="submitEnq" id="btnSave"onclick="submitFunction()">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -113,31 +166,61 @@
         $("#successModel").modal('show');
     };
 
-    $("#btnSave").click(function () {
+    //$("#btnSave").click(function () {
+    //    debugger;
+    //    var formData = $("#CreateFileForm").serialize();
+    //    //var files = $("#selectedfile").get(0).files;
+    //    //var fileData = new FormData();
+
+    //    //for (var i = 0; i < files.length; i++) {
+    //    //    fileData.append("selectedfile", files[i]);
+    //    //}
+
+
+    //    //var files[] = $("#selectedfile").val();
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: '/CreateFile/SaveFileDetails',
+    //        dataType: "JSON",
+    //        data: formData,
+    //        success: function (data) {
+    //            if (data > 0) {
+    //                successModal();
+    //            }
+    //            else {
+    //                failureModal();
+    //            }
+    //        },
+    //        error: function (courses) {
+    //            failureModal();
+    //        }
+    //    });
+
+    //});
+
+    function submitFunction(value) {
         debugger;
-        var formData = $("#CreateFileForm").serialize();
-        $.ajax({
-            type: "POST",
-            url: '/CreateFile/SaveFileDetails',
-            dataType: "JSON",
-            data: formData,
-            success: function (data) {
-                if (data > 0) {
-                    successModal();
-                }
-                else {
-                    failureModal();
-                }
-            },
-            error: function (courses) {
-                failureModal();
-            }
-        });
+        var form = $('#CreateFileForm');
+        form.submit();
+    };
+
+    $("#otherAttach_1").change(function () {
+        debugger;
+        var filename = this.files[0].name;
+
+        $("#divPsFileName_1 span").text(filename);
+        $("#divPsFileName_1").removeClass('d-none');
+        $('label[for=otherAttach_1]').closest('label').attr('style', 'color:black');
+
     });
 
-
-
-
-
+    //remove function
+    function removeName(elem) {
+        $(elem).parent().addClass('d-none');
+        var className = $(elem).attr('class');
+        var id = className.replace(/\s+/g, "").replace('removeButton', '');
+        $('#' + id).val('');
+    }
 
 </script>
