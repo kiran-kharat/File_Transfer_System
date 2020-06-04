@@ -18,7 +18,7 @@ namespace File_Transfer_System.Controllers
         {
             fileDetailsDAL = new FileDetailsDAL();
             FileInfoModel fileInfoModel = new FileInfoModel();
-            fileInfoModel = fileDetailsDAL.GetFileInfo();
+            //fileInfoModel = fileDetailsDAL.GetFileInfo();
             return View("CreateFile", fileInfoModel);
         }
 
