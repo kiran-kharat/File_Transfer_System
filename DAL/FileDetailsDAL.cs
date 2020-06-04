@@ -42,5 +42,34 @@ namespace File_Transfer_System.DAL
             return true;
         }
 
+        public bool SaveAttachmentDetails(FormCollection formData, List<HttpPostedFileBase> files)
+        {
+
+            int status = 0;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand();
+                foreach (HttpPostedFileBase file in files)
+                {
+
+                    cmd = new SqlCommand("sp_AttachFiles", connection);
+                    cmd.Parameters.AddWithValue("@FileNo", Convert.ToInt32(formData["FileNo"]));
+                    cmd.Parameters.Add(new SqlParameter("@FileName", file.FileName));
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    status = Convert.ToInt32(cmd.ExecuteScalar());
+                    connection.Close();
+                    status += status;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

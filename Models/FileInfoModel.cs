@@ -16,5 +16,10 @@ namespace File_Transfer_System.Models
         public string Remarks { get; set; }
         public int SerialNo { get; set; }
         public string FileType { get; set; }
+        //public HttpPostedFileBase FileAttachment { get; set; }
+
+        [Display(Name = "Attachment")]
+        public HttpPostedFileBase[] AttachFiles { get; set; }
+        //public List<HttpPostedFileBase> files { get; set; }
     }
 }
