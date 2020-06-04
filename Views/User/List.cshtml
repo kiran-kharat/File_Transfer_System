@@ -1,0 +1,174 @@
+﻿@model List<File_Transfer_System.Models.UserModel>
+@{
+    ViewBag.Title = "List";
+}
+<div class="row">
+    <div class="col-sm-12 ">
+        <div class="row prjNmBlock">
+            <div class="col-sm-8 align-self-center">
+
+            </div>
+            <div class="col-sm-4 text-right">
+                <button type="button" id="btnSubmit" onclick="OpenModal()" class="createBomBtn buttonContainer saveBtn">Create</button>
+            </div>
+        </div>
+    </div>
+    <table class="table mt-4">
+        <tr>
+            <th>Salutation</th>
+            <th>User Name</th>
+            <th>Gender</th>
+            <th>Email Id</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Salutation</td>
+                <td>@item.UserName</td>
+                <td>@item.Gender</td>
+                <td>@item.EmailId</td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="modal fade" id="FinalPrcModel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered " role="document" style="max-width:60%">
+        <div class="modal-content">
+            <div class="closeMenu" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="xbtn">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="userForm">
+                    <div class="col-sm-12 row BomRefItem m-0">
+                        <div class="col-sm-8 ">
+                            <div class="row addMarkInput">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <button type="button" class="submitEnq revisionBtn" onclick="CloseModal()">Cancel</button>
+                            <button type="button" onclick="Submit()" class="submitEnq publishBtn">Submit</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <div class="tableBlock overflowModel parentDiv">
+                            <table class="table userTable">
+                                <tr>
+                                    <td class="intCurr">
+                                        Salutation
+                                    </td>
+                                    <td class="convertRs">
+                                        <input type="hidden" name="Id" value="0" />
+                                        @Html.DropDownList("Salutation",
+                                        new List<SelectListItem>
+                                        {
+                                                            new SelectListItem() {Text = "Mr", Value="Mr"},
+                                                            new SelectListItem() {Text = "Mrs", Value="Mrs"},
+                                                            new SelectListItem() {Text = "Miss", Value="Miss"}
+                                        }, new { @class = "selectDrpdwn" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="intCurr">
+                                        User Name
+                                    </td>
+                                    <td class="convertRs">
+                                        <input class="whiteBgInput" name="UserName" type="text" id="UserName" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="intCurr">
+                                        Gender
+                                    </td>
+                                    <td class="convertRs">
+                                        @Html.DropDownList("Gender",
+                                        new List<SelectListItem>
+                                        {
+                                                            new SelectListItem() {Text = "Male", Value="Male"},
+                                                            new SelectListItem() {Text = "Female", Value="Female"}
+                                        }, new { @class = "selectDrpdwn" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="intCurr">
+                                        Email
+                                    </td>
+                                    <td class="convertRs">
+                                        <input class="whiteBgInput" type="email" name="EmailId" />
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="col-sm-12 mt-4 addUsersDiv">
+                                <div class="row addMoreLoctn d-flex justify-content-end ">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="AddUsers()">
+                                        Add More Users
+                                        <img src="../../Assets/images/addMore.png">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var userTable;
+    $(document).ready(function () {
+        $("select[name='Salutation']").prepend("<option value=''>Select Salutation</option>");
+        $("select[name='Gender']").prepend("<option value=''>Select Gender</option>");
+        $("select[name='Salutation']").val("");
+        $("select[name='Gender']").val("");
+
+        userTable = $(".userTable").clone();
+        $(userTable).addClass("clonedTable");
+    });
+
+    function AddUsers() {
+        var newTable = $(userTable).clone();
+        $(newTable).insertBefore(".addUsersDiv");
+        userTable = $(newTable).clone();
+    }
+
+    function Submit() {
+        var form = $("#userForm");
+        var formData = form.serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '/User/Save',
+            dataType: "JSON",
+            data: formData,
+            success: function (data) {
+                CloseModal();
+                if (data) {
+                    alert("Saved Successfully");
+                    window.location.reload();
+                }
+                else
+                    alert("Error occured while saving");
+            },
+            error: function (courses) {
+                CloseModal();
+                alert("Error occured while saving");
+            }
+        });
+    }
+
+    function OpenModal() {
+        CloseModal();
+        $(".modal").modal('show');
+    }
+
+    function CloseModal() {
+        $(".clonedTable").remove();
+        $("select[name='Salutation']").val("");
+        $("select[name='Gender']").val("");
+        $("input[name='UserName']").val("");
+        $("input[name='EmailId']").val("");
+        $(".modal").modal('hide');
+    }
+</script>

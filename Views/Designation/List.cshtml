@@ -1,0 +1,111 @@
+﻿@model List<File_Transfer_System.Models.DesignationModel>
+@{
+    ViewBag.Title = "List";
+}
+<div class="row">
+    <div class="col-sm-12 ">
+        <div class="row prjNmBlock">
+            <div class="col-sm-8 align-self-center">
+
+            </div>
+            <div class="col-sm-4 text-right">
+                <button type="button" id="btnSubmit" onclick="OpenModal()" class="createBomBtn buttonContainer saveBtn">Create</button>
+            </div>
+        </div>
+    </div>
+    <table class="table mt-4">
+        <tr>
+            <th>Description</th>
+            <th>Abbreviation</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Description</td>
+                <td>@item.Abbreviation</td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="modal fade" id="FinalPrcModel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered " role="document" style="max-width:60%">
+        <div class="modal-content">
+            <div class="closeMenu" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="xbtn">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12 row BomRefItem m-0">
+                    <div class="col-sm-8 ">
+                        <div class="row addMarkInput">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <button type="button" class="submitEnq revisionBtn" onclick="CloseModal()">Cancel</button>
+                        <button type="button" onclick="Submit()" class="submitEnq publishBtn">Submit</button>
+                    </div>
+                </div>
+                <div class="col-sm-12 p-0">
+                    <div class="tableBlock overflowModel">
+                        <table class="table ">
+                            <tr>
+                                <td class="intCurr">
+                                    Description
+                                </td>
+                                <td class="convertRs">
+                                    <input class="whiteBgInput" type="text" id="description" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="intCurr">
+                                    Abbreviation
+                                </td>
+                                <td class="convertRs">
+                                    <input class="whiteBgInput" type="text" id="abbreviation" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function Submit() {
+        var obj = {};
+        obj.Description = $("#description").val();
+        obj.Abbreviation = $("#abbreviation").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Designation/Save',
+            dataType: "JSON",
+            data: obj,
+            success: function (data) {
+                CloseModal();
+                if (data) {
+                    alert("Saved Successfully");
+                    window.location.reload();
+                }
+                else
+                    alert("Error occured while saving");
+            },
+            error: function (courses) {
+                CloseModal();
+                alert("Error occured while saving");
+            }
+        });
+    }
+
+    function OpenModal() {
+        $(".modal").modal('show');
+    }
+
+    function CloseModal() {
+        $("#description").val('');
+        $("#abbreviation").val('');
+        $(".modal").modal('hide');
+    }
+</script>

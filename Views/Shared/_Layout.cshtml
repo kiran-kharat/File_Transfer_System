@@ -20,17 +20,117 @@
 
 </head>
 <body>
-    <div class="header" style="height:70px;">
-        <div class="row LoginUser">
-            <div class="col-sm-12 logOut text-right">
-                <p style="color:#009688;">Welcome</p>            
-                @Html.ActionLink("Logout", "Logout", "Login")
+
+    <div class="container-fluid ">
+        <!--header commonon every page-->
+        <div class="header">
+            <div class="row">
+
+                <div class="col-sm brand-logo"><a href="/home/index">@*<img src="~/Assets/images/logo.png" />*@</a></div>
+
+                <div class="col-sm LoginUser  text-right">
+                    <div class="username col-12"> <img src="~/Assets/images/user.png" onclick="location.href='@Url.Action("Index","EditUser")'" /></div>
+                    <div class="logOut col-12">
+                        @Html.ActionLink("Logout", "Logout", "Login")
+                    </div>
+                </div>
+            </div>
+            <div class="row blueHorizLine"></div>
+        </div>
+        <!--header commonon every page-->
+        <div class="sub-header">
+            <div class="row activiesList">
+                <div class="col-sm-11 pr-0">
+                    <div class="row headerMenu">
+                        <div class="col-sm-1 text-center">
+                            <a href="~/CreateFile">
+                                <img src="~/Assets/images/enquiry.png" />
+                                <div class="activities CallLoader">File</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <a href="~/Department">
+                                <img src="~/Assets/images/grpProd.svg" />
+                                <div class="activities CallLoader">Department Master</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <a href="~/SubDepartment">
+                                <img src="~/Assets/images/subAssemble.svg" />
+                                <div class="activities CallLoader">Sub Department Master </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <a href="~/Designation">
+                                <img src="~/Assets/images/assembly.svg" />
+                                <div class="activities CallLoader">Designation Master</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1 text-center CallLoader">
+                            <a href="~/User">
+                                <img src="~/Assets/images/team.svg" />
+                                <div class="activities">Users</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1 text-right fullscreen p-4">
+                    <img src="~/Assets/images/fullscreen.png" />
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
         @RenderBody()
+        <div class="loaderGif" style="display:none">
+            <img src="~/Assets/images/loader2.gif" style="width:80px; height:80px" />
+        </div>
     </div>
 
 </body>
 </html>
+
+
+<script>
+
+    $(".CallLoader").on('load', function () {
+        $(".loaderGif").show().fadeOut();
+    });
+    $(window).on('beforeunload', function () {
+        $(".loaderGif").show().fadeIn();
+    });
+
+    $(document).ready(function () {
+        $(".fullscreen").click(function () {
+            // ShowSnackBar("fullscreen");
+            $(".header").slideToggle();
+        })
+    });
+
+    function ShowSnackBar(key) {
+        $("div[id='snackbar']").remove();
+        $('<div id="snackbar"></div>').appendTo('body');
+        var x = document.getElementById("snackbar");
+        x.innerHTML = key;
+        x.className = "snackBarshow";
+        setTimeout(function () { x.className = x.className.replace("snackBarshow", ""); }, 3000);
+    }
+
+    function ValidateFile(element) {
+        var isValid = true;
+        var ext = $(element).val().split('.').pop().toLowerCase();
+        if (ext == "exe") {
+            ShowSnackBar('Invalid file extension');
+            isValid = false;
+            $(element).val('');
+        }
+
+        var fileLength = $(element)[0].files.length;
+        var fileSize = ($(element)[0].files[fileLength - 1].size);
+        if (fileSize > 26214400) {
+            ShowSnackBar("File size larger than 25 MB");
+            isValid = false;
+            $(element).val('');
+        }
+        return isValid;
+    }
+
+</script>
